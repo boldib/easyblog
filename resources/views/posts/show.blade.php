@@ -1,0 +1,18 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">Create new post</div>
+
+                {{$post->title}}
+                {{$post->image()}}
+                <img src="{{$post->image()}}">
+                
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

@@ -22,7 +22,7 @@ class PostFactory extends Factory
     {
         $title = fake()->sentence(rand(1, 8));
         $slug = Str::of($title)->slug();
-        $image = 'https://picsum.photos/id/'.rand(1,100).'/400';
+        $image = 'https://picsum.photos/id/'.rand(1,1000).'/400';
 
         return [
             'user_id' => rand(1, User::count()),

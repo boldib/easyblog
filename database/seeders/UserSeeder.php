@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
         $profiles = Profile::where('description', null)->get();
         
         foreach ($profiles as $profile) {
-            $profile->image = 'https://picsum.photos/id/'.rand(1,100).'/400';
+            $profile->image = 'https://picsum.photos/id/'.rand(1,1000).'/400';
             $profile->description = fake()->paragraph(10);
             $profile->save();
         }

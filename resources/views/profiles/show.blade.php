@@ -18,8 +18,7 @@
                                     <p class="mt-1">{!! Str::words($post->content, 50, '...') !!}</p>
                                 </div>
                             </div>
-                        </div>
-                        
+                        </div>  
                     @endforeach
 
                     <div class="col d-flex justify-content-center mb-5">

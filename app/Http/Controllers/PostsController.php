@@ -52,6 +52,7 @@ class PostsController extends Controller
             'tags' => ['nullable', 'max:150'],
         ]);
 
+        // Image
         if($request->file('image')){
 			
             $image = Image::make($request->file('image'))->encode('webp', 100)->fit(400, 400)->save();
@@ -60,12 +61,13 @@ class PostsController extends Controller
 			Storage::disk('local')->put('public/images/'.$imgfilename, fopen($request->file('image'), 'r+'));
 
 		} else {
-            $image = null;
+            $imgfilename = null;
         }
 
+        // Slug
         $slug = Str::of($data['title'])->slug();
-
-
+        
+        // Store post
         $post = Post::create([
             'user_id' => Auth::id(),
 			'title' => $data['title'],
@@ -73,6 +75,36 @@ class PostsController extends Controller
 			'image' => $imgfilename,
 			'slug' => $slug,
 		]);
+
+        //TAGS
+		if(isset($data['tags']) && $post){ 
+            
+            $tagNames = explode(',',$request->get('tags'));
+
+		    $tagIds = [];
+		    $tagcount = 0;
+
+		    foreach($tagNames as $tagName){
+
+				$tagcount++;
+				
+                $tag = Tag::firstOrCreate([
+					'title'=> strtolower($tagName),
+					'slug' => Str::of($tagName)->slug(),
+				]);
+
+				if($tag){
+				    $tagIds[] = $tag->id;
+				}
+
+				if($tagcount == 6) break;
+
+			}
+			
+            $post->tags()->sync($tagIds);
+
+		}
+
 
         return redirect("/".$post->user->profile->slug."/".$post->slug);
 

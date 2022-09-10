@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Comment;
 use App\Models\Post;
+use App\Models\User;
+use App\Models\Tag;
 
 class HomeController extends Controller
 {
@@ -15,7 +18,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
+        //$this->middleware('auth');
     }
 
     /**
@@ -25,8 +28,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $posts = Post::paginate(10);
         
-        return view('home', compact('posts'));
+        $posts = Post::orderByDesc('id')->paginate(10);
+        $users = User::orderByDesc('id')->paginate(20);
+        $tags = Tag::orderByDesc('id')->paginate(10);
+        $comments = Comment::orderByDesc('id')->paginate(10);
+
+        $allposts = Post::count();
+        
+        return view('home', compact('posts', 'users', 'tags', 'comments', 'allposts'));
     }
 }

@@ -15,8 +15,32 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    <style>
+        .nametag{
+            text-decoration: none;
+            color: #343434;
+        }
+
+        .nametag:hover{
+            text-decoration: none;
+            color: #343434;
+        }
+
+        .card a{
+            color: #525252;
+            text-decoration: none;
+        }
+        
+        .tags a{
+            color: #525252;
+            text-decoration: none;
+        }
+        
+    </style>
+
 </head>
-<body>
+<body style="background-image: url('/storage/pexels-wallpaper.webp'); background-size: cover; background-attachment: fixed;">
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -55,6 +79,19 @@
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+
+                                    <a class="dropdown-item" href="{{ route('post.create') }}">
+                                        New Post
+                                    </a>
+
+                                    <a class="dropdown-item" href="/{{ Auth::user()->profile->slug }}">
+                                        My Profile
+                                    </a>
+
+                                    <a class="dropdown-item" href="/profile/edit/{{ Auth::user()->profile->slug }}">
+                                        Edit My Profile
+                                    </a>
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

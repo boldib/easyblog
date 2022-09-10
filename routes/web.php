@@ -2,25 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\PostsController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostsController;
+use App\Http\Controllers\ProfilesController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\TagsController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Auth::routes();
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //COMMENTS
 Route::group(['middleware' => 'auth'], function () {
@@ -30,15 +23,27 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/comments/delete/{id}', [CommentsController::class, 'delete']);
 });
 
+//Tags
+Route::get('/tag/{slug}',[TagsController::class, 'index']);
+
+//Search
+Route::get('search', [App\Http\Controllers\SearchController::class, 'index'])->name('search');
+
+//Profiles
+Route::get('/{profileslug}', [ProfilesController::class, 'show']);
+Route::get('/profile/edit/{profileslug}', [ProfilesController::class, 'edit'])->middleware(['auth']);
+Route::patch('/profile/edit/{profileslug}/save', [ProfilesController::class, 'update'])->middleware(['auth']);
+Route::delete('/profile/delete/{id}', [ProfilesController::class, 'destroy'])->middleware(['auth']);
+
 //Posts
 Route::name('post.')->group(function () {
-    Route::get('/{profileslug}/{postslug}', [PostsController::class, 'show'])->name('new');
-    Route::get('/new', [PostsController::class, 'create'])->name('create');
-    Route::post('/store', [PostsController::class, 'store'])->name('store');
-    Route::get('/post/edit/{id}',[PostsController::class, 'edit']);
-    Route::patch('/post/update/{id}', [PostsController::class, 'update']);
-    Route::delete('/psot/delete/{id}', [PostsController::class, 'delete']);
+    Route::get('/{profileslug}/{postslug}', [PostsController::class, 'show']);
+    Route::get('/create/new/post', [PostsController::class, 'create'])->middleware(['auth'])->name('create');
+    Route::post('/store', [PostsController::class, 'store'])->middleware(['auth'])->name('store');
+    Route::get('/post/edit/{id}',[PostsController::class, 'edit'])->middleware(['auth']);
+    Route::patch('/post/update/{id}', [PostsController::class, 'update'])->middleware(['auth']);
+    Route::delete('/post/delete/{id}', [PostsController::class, 'destroy'])->middleware(['auth']);
 });
 
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+//Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

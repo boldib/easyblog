@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class CommentsController extends Controller
 {
     public function create(Request $request){
-
-        try {
-            //code...
-        } catch (\Throwable $th) {
-            //throw $th;
-        }
         
         $user = auth()->user();
 
@@ -25,9 +21,10 @@ class CommentsController extends Controller
         }
 
         $post = Post::where('id', $request->id)->firstOrFail();
-        $comment = new Comment;
+
         $data = request()->validate(['comment' => 'required']);
 
+        $comment = new Comment;
         $comment->comment = $request->comment;
         $comment->user_id = $user->id;
         $comment->post_id = $post->id;
@@ -35,41 +32,6 @@ class CommentsController extends Controller
 
         return redirect('/'.$post->user->profile->slug.'/'.$post->slug);
        
-    }
-
-    public function edit($id){    
-    
-        $comment = Comment::where('id', $id)->firstOrFail();
-        $user = User::where('id', $comment->user_id)->firstOrFail();
-
-        if(auth()->user()->id == $comment->user_id || auth()->user()->role_id == 1){
-            return view('comments.edit', compact('comment'));    
-        } else{
-            abort(403);
-        }
-
-    } 
-
-    public function update(Request $request, $id){
-        
-        $data = request()->validate([	
-            'comment' => 'required'
-        ]);
-    
-        $comment = Comment::where('id', $id)->firstOrFail();
-        $post = Post::where('id', $comment->post_id)->firstOrFail();
-        $user = User::where('id', $post->user_id)->firstOrFail();
-    
-        if(auth()->user()->id == $comment->user_id || auth()->user()->role == 'admin'){
-            
-            $comment->comment = $data['comment'];
-            $comment->save();
-            return redirect('/'.$post->user->profile->slug.'/'.$post->slug);
-
-        } else{
-            abort(403);
-        }
-
     }
 
     public function delete(Request $request, $id){

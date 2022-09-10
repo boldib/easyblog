@@ -27,16 +27,22 @@ class Post extends Model
     
     public function tags()
     {   
-        return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id');
+      return $this->belongsToMany(Tag::class, 'post_tag', 'post_id', 'tag_id');
     }
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+      return $this->hasMany(Comment::class);
     }
 
     public function image(){
-      $imageSource = ($this->image) ? $this->image : '/storage/images/default.webp';
+      
+      $imageSource = ($this->image) ? $this->image : 'default.webp';
+
+      if(str_contains($imageSource, 'picsum')) {
+        return $imageSource;
+      }
+    
   		return '/storage/images/'.$imageSource;
     }
 }

@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class RegisterController extends Controller
 {
@@ -64,6 +65,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $slug = Str::of($data['name'])->slug();
+
+        $check = array('tag', 'tags', 'admin', 'comment', 'comments', 'tos', 'contact', 'search');
+        if (in_array($slug, $check)) {
+
+            die("You can't use this name, plase choose another one.");
+            
+        }
+
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],

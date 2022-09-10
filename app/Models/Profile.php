@@ -18,11 +18,15 @@ class Profile extends Model
         'links'
     ];
 	
-	public function profileImage(){
-		
-		// Show profile image - or default image
-		$imagePath = ($this->image) ?  $this->image : 'profile/default.png';
-		return '/storage/'.$imagePath;
+	public function image(){
+
+        $imageSource = ($this->image) ? $this->image : 'default.webp';
+
+        if(str_contains($imageSource, 'picsum')) {
+            return $imageSource;
+        }
+
+		return '/storage/profiles/'.$imageSource;
 	}
 	
     public function user(){

@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8" >
             <div style="background-color: #ffffffa6;">
-                <div class="p-2" class="card-header"><h5 class="mt-2">Latest Posts</h5></div>
+                <div class="p-2" class="card-header"><h5 class="mt-2">Search Results</h5></div>
 
                 <div style="background-color: #ffffffa6;">
 
@@ -31,48 +31,9 @@
         </div>
 
         <div class="col-4">
-
-            <div class="mb-2">
+            <div class="mt-2">
                 <x-search/>
-            </div>
-
-            <div class="card mt-2">
-                <div class="card-body">
-                    {{$allposts}} posts in the database
-                </div>
-            </div>
-
-            <div class="card mt-2">
-                <div class="card-header">New users:</div>
-
-                <div class="card-body">
-                    @foreach($users as $user)
-                        <a href="/{{$user->profile->slug}}"><img class="rounded-circle m-1" width="20px" height="20px" src="{{$user->profile->image()}}"> {{$user->name}}</a><br>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="card mt-2">
-                <div class="card-header">Latest Tags:</div>
-
-                <div class="card-body">
-                    @foreach($tags as $tag)
-                        <a href="/tag/{{$tag->slug}}">{{$tag->title}}</a><br>
-                    @endforeach
-                </div>
-            </div>
-
-            <div class="card mt-2">
-                <div class="card-header">Latest Comments:</div>
-
-                <div class="card-body">
-                    @foreach($comments as $comment)
-                        <a href="/{{$comment->post->user->profile->slug}}/{{$comment->post->slug}}">{{$comment->comment}}</a><br>
-                    @endforeach
-                </div>
-            </div>
-
-            
+            </div>            
         </div>
 
     </div>

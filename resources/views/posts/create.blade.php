@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Create new post</div>
+                <div class="card-header">Create new blog post</div>
 
                 <form class="p-4" method="POST" action="{{ route('post.store') }}" enctype="multipart/form-data">
                     @csrf
@@ -57,7 +57,30 @@
                         
                     </div>
 
-                    <button  class="button btn-primary">Submit</button>
+                    <!-- Tags -->
+                    <div class="form-group row">
+                        <label for="tags" class="col-md-4 col-form-label"><span>Tags</span> <span style="font-size: x-small;"> (separate by comma)<span> <span class="optional">(optional)</span></label>
+                    
+                    <input id="tags" 
+                            type="text"
+                            pattern="^[^,]+(?:,[^,]+){0,4}$" 
+                            class="form-control @error('tags') is-invalid @enderror"
+                            name="tags"
+                            placeholder="input example, for, tags"
+                            value="{{ old('tags') }}" 
+                            autocomplete="tags" autofocus>
+
+                                        @error('tags')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    
+                    </div>
+
+                    <div class="submit-button mt-3">
+                        <button  class="button btn-primary">Submit</button>
+                    </div>
                     
                 </form>
                 

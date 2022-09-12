@@ -14,43 +14,7 @@ use Intervention\Image\Facades\Image;
 
 class ProfilesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function show($profileslug)
     {
         $profile = Profile::where('slug', $profileslug)->firstorFail();
@@ -61,12 +25,7 @@ class ProfilesController extends Controller
         return view('profiles.show', compact('profile', 'posts'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($profileslug)
     {
         
@@ -78,13 +37,7 @@ class ProfilesController extends Controller
         
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $profileslug)
     {
         $profile = Profile::where('slug', $profileslug)->firstOrFail();
@@ -141,12 +94,6 @@ class ProfilesController extends Controller
     	} else abort(403);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
 
@@ -160,4 +107,5 @@ class ProfilesController extends Controller
 		$user->delete();
 
     }
+
 }

@@ -5,12 +5,12 @@ use App\Models\Comment;
 use App\Models\Tag;
 use App\Models\User;
 
-class Infolist extends \Illuminate\Support\Facades\Facade
+class Infolist
 {
     public static function get(string $type, int $num){
 
         if($type == 'users'){
-
+            
             $users = User::all()->take($num);
 
             foreach($users as $user){
@@ -22,7 +22,7 @@ class Infolist extends \Illuminate\Support\Facades\Facade
         if($type == 'tags'){
 
             $tags = Tag::all()->take($num);
-
+        
             for ($i=0; $i < $num ; $i++) { 
                 echo '<a href="/tag/'.$tags[$i]->slug.'">'.$tags[$i]->title.'</a><br>';
             }
@@ -38,12 +38,12 @@ class Infolist extends \Illuminate\Support\Facades\Facade
             }
 
         }
-
+        
 
     }
 
+    
+        
 
-
-
-
+    
 }

@@ -30,12 +30,10 @@ class HomeController extends Controller
     {
         
         $posts = Post::orderByDesc('id')->paginate(10);
-        $users = User::orderByDesc('id')->paginate(20);
         $tags = Tag::orderByDesc('id')->paginate(10);
-        $comments = Comment::orderByDesc('id')->paginate(10);
 
         $allposts = Post::count();
         
-        return view('home', compact('posts', 'users', 'tags', 'comments', 'allposts'));
+        return view('home', compact('posts', 'tags', 'allposts'));
     }
 }

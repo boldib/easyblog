@@ -41,21 +41,19 @@
                         
                         <!-- description -->
                         <div class="form-group row">
-                            <label for="description" class="col-md-4 col-form-label">Description</label>
-                        
-                        <input id="description" 
-                                type="text"
-                                class="form-control @error('description') is-invalid @enderror"
-                                name="description"
-                                value="{{ $profile->description }}" 
-                                autocomplete="description" autofocus>
-
-                                            @error('description')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        
+                        <label for="description" class="col-md-4 col-form-label"><span>Description</span></label>
+                    
+                        <textarea id="description" 
+                            rows="10"
+                            class="form-control @error('description') is-invalid @enderror"
+                            name="description"
+                            value="{{ old('description') }}" 
+                            autocomplete="description" autofocus>{{$profile->description}}</textarea>
+                            @error('description')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror        
                         </div>
                         
                         

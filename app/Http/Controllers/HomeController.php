@@ -28,12 +28,12 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
+
         $posts = Post::orderByDesc('id')->paginate(10);
-        $tags = Tag::orderByDesc('id')->paginate(10);
 
         $allposts = Post::count();
         
-        return view('home', compact('posts', 'tags', 'allposts'));
+        return view('home', compact('posts', 'allposts'));
+        
     }
 }

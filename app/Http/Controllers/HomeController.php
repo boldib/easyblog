@@ -29,11 +29,9 @@ class HomeController extends Controller
     public function index()
     {
 
-        $posts = Post::orderByDesc('id')->paginate(10);
-
-        $allposts = Post::count();
+        $posts = Post::orderByDesc('id')->paginate(10)->onEachSide(0);
         
-        return view('home', compact('posts', 'allposts'));
+        return view('home', compact('posts'));
         
     }
 }

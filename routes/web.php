@@ -15,7 +15,7 @@ Auth::routes();
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 
-//COMMENTS
+//Comments
 Route::group(['middleware' => 'auth'], function () {
     Route::post('/comment/{id}', [CommentsController::class, 'create']);
     Route::get('/comments/edit/{id}',[CommentsController::class, 'edit']);

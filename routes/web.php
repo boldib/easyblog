@@ -33,7 +33,7 @@ Route::get('search', [App\Http\Controllers\SearchController::class, 'index'])->n
 Route::get('/{profileslug}', [ProfilesController::class, 'show']);
 Route::get('/profile/edit/{profileslug}', [ProfilesController::class, 'edit'])->middleware(['auth']);
 Route::patch('/profile/edit/{profileslug}/save', [ProfilesController::class, 'update'])->middleware(['auth']);
-Route::delete('/profile/delete/{id}', [ProfilesController::class, 'destroy'])->middleware(['auth']);
+Route::delete('/profile/delete/{id}', [ProfilesController::class, 'delete'])->middleware(['auth']);
 
 //Posts
 Route::name('post.')->group(function () {
@@ -42,8 +42,5 @@ Route::name('post.')->group(function () {
     Route::post('/store', [PostsController::class, 'store'])->middleware(['auth'])->name('store');
     Route::get('/post/edit/{id}',[PostsController::class, 'edit'])->middleware(['auth']);
     Route::patch('/post/update/{id}', [PostsController::class, 'update'])->middleware(['auth']);
-    Route::delete('/post/delete/{id}', [PostsController::class, 'destroy'])->middleware(['auth']);
+    Route::delete('/post/delete/{id}', [PostsController::class, 'delete'])->middleware(['auth']);
 });
-
-
-//Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

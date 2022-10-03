@@ -76,11 +76,20 @@
                     </p>
                     <p>This article was posted on {{$post->created_at->format('d-m-Y')}}</p>
                 </div>
-
-                <div class="card-body">
-
-                </div>
             </div>
+
+            @if(Auth::id() == $post->user->id)
+            <div class="card mt-2">
+                <div class="card-header p-2">Manage post:</div>
+                    <div class="card-body">
+                            <form action="/post/delete/{{$post->id}}" method="post">
+                            @csrf
+                            @method('DELETE')
+                                <button type="submit">Delete</button>
+                            </form>
+                    </div>
+            </div>
+            @endif
 
             <div class="mt-2">
                 <x-search />

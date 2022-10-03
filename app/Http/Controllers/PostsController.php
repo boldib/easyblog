@@ -2,54 +2,40 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Profile;
-
-use App\Classes\Imgstore;
-use App\Classes\Tagpost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use App\Interfaces\PostRepositoryInterface;
 
 class PostsController extends Controller
 {
 
+    private PostRepositoryInterface $postRepository;
+    
+    public function __construct(PostRepositoryInterface $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
+
+    public function show($profileSlug, $postSlug){
+        $post = $this->postRepository->show($profileSlug, $postSlug);
+        return view('posts.show', compact('post'));
+    }
+
     public function create()
     {
-        $user = auth()->user();
+        $user = $this->postRepository->create();
         return view('posts.create', compact('user'));
     }
 
-    public function store(Request $request)
-    {
-        $data = request()->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'image' => 'nullable|image|max:1024',
-            'tags' => ['nullable', 'max:150'],
-        ]);        
-        
-        $post = Post::create([
-            'user_id' => Auth::id(),
-			'title' => $data['title'],
-			'content' => $data['content'],
-            'image' => Imgstore::setPostImage($request->file('image')),
-			'slug' => Str::of($data['title'])->slug(),
-		]);
+    public function store(Request $request){
+        $post = $this->postRepository->store($request);
+        return redirect($post);
 
-        Tagpost::sync($data['tags'], $post);
-
-        return redirect("/".$post->user->profile->slug."/".$post->slug);
     }
 
-    public function show($profileslug, $postslug)
-    {
-        $profile = Profile::where('slug', $profileslug)->firstOrFail();
-        
-        $post = Post::where('user_id', $profile->user->id)
-        ->where('slug', $postslug)
-        ->firstOrFail();
-
-        return view('posts.show', compact('post'));
+    public function delete($postId){
+        $post = $this->postRepository->delete($postId, Auth::id());
+        if($post) return redirect('/');        
     }
+    
 }

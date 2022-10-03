@@ -7,19 +7,20 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Profile;
 
+use App\Classes\SlugCheck;
 use App\Classes\Imgstore;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProfilesController extends Controller
 {
-    
+
     public function show($profileslug)
     {
         $profile = Profile::where('slug', $profileslug)->firstorFail();
         $posts = Post::where('user_id', $profile->user->id)
-        ->orderByDesc('id')
-        ->paginate(10);
+            ->orderByDesc('id')
+            ->paginate(10);
         return view('profiles.show', compact('profile', 'posts'));
     }
 
@@ -27,7 +28,7 @@ class ProfilesController extends Controller
     public function edit($profileslug)
     {
         $profile = Profile::where('slug', $profileslug)->firstOrFail();
-        if($profile->user->id != Auth::user()->id) abort(403);
+        if ($profile->user->id != Auth::user()->id) abort(403);
         return view('profiles.edit', compact('profile'));
     }
 
@@ -35,36 +36,28 @@ class ProfilesController extends Controller
     public function update(Request $request, $profileslug)
     {
         $profile = Profile::where('slug', $profileslug)->firstOrFail();
-        if($profile->user->id != Auth::user()->id) abort(403);
+        if ($profile->user->id != Auth::user()->id || Auth::user()->role != 'admin') abort(403);
 
-    	if(Auth::user()->id == $profile->user->id || Auth::user()->role == 'admin')
-		{
-	    	$data = request()->validate([
-				'name'	=> ['required', 'max:32'],
-	    		'description' => 'nullable|max:10000',
-	    		'slug' => ['required', 'max:32'],
-                'image' => 'nullable|image|max:1024',		
-	    	]);
-	    		
-			$forbidden = array("admin", "search", "terms-of-service", "tags");
-			if(in_array(Str::of($data['slug'])->slug(), $forbidden)) return redirect()->back()->withErrors(['slug' => 'This url is already used']);
+        $data = request()->validate([
+            'name' => ['required', 'max:32'],
+            'description' => 'nullable|max:10000',
+            'slug' => ['required', 'max:32'],
+            'image' => 'nullable|image|max:1024',
+        ]);
 
-            // Check if url-slug is already used by another user:
-            $urlExists = Profile::where('slug', Str::of($data['slug'])->slug())->first();
-			if(isset($urlExists->slug)){
-                if($urlExists->user->id != Auth::user()->id) {return redirect()->back()->withErrors(['slug' => 'This url is already used']);}
-			}
+        $slugCheck = new SlugCheck($data['slug']);
+        if ($slugCheck->isForbidden() || $slugCheck->isUsed()) return redirect()->back()->withErrors(['slug' => 'This url is already used']);
 
-			$profile->slug = Str::of($data['slug'])->slug();
-			$profile->user->name = $data['name'];
-			$profile->image = Imgstore::file($request->file('image'), 'profile');
-			$profile->description = (isset($data['description'])) ? $data['description'] : NULL;
-			$profile->update();
-			$profile->user->update();
+        $profile->user->name = $data['name'];
+        $profile->slug = Str::of($data['slug'])->slug();
+        $profile->image = Imgstore::setProfileImage($request->file('image'));
+        $profile->description = (isset($data['description'])) ? $data['description'] : NULL;
+        $profile->update();
+        $profile->user->update();
 
-	    	return redirect("/{$profile->slug}");
-    	} else abort(403);
+        return redirect("/{$profile->slug}");
     }
+
 
     public function destroy($id)
     {
@@ -73,9 +66,9 @@ class ProfilesController extends Controller
 
         $user->posts()->delete();
         $user->likes()->delete();
-		$user->comments()->delete();
-		$user->profile()->delete();
-		$user->delete();
+        $user->comments()->delete();
+        $user->profile()->delete();
+        $user->delete();
     }
-
 }
+

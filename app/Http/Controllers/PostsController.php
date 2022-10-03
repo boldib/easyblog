@@ -33,7 +33,7 @@ class PostsController extends Controller
             'user_id' => Auth::id(),
 			'title' => $data['title'],
 			'content' => $data['content'],
-			'image' => Imgstore::file($request->file('image'), 'post'),
+            'image' => Imgstore::setPostImage($request->file('image')),
 			'slug' => Str::of($data['title'])->slug(),
 		]);
 

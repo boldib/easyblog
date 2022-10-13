@@ -15,9 +15,9 @@
                     @foreach($posts as $post)
                     <div class="row">
                         <div class="d-flex m-2">
-                            <div class="col-sm-2"><p><a href="{{$post->user->profile->slug}}/{{$post->slug}}"><img class="w-100 p-1" src="{{$post->image()}}"></a></p></div>
+                            <div class="col-sm-2"><p><a href="/{{$post->user->profile->slug}}/{{$post->slug}}"><img class="w-100 p-1" src="{{$post->image()}}"></a></p></div>
                             <div class="col-sm-10 p-1">
-                                <p class="mt-1" style="padding-right: 15px;"><strong><a href="{{$post->user->profile->slug}}/{{$post->slug}}">{{$post->title}}</a></strong> posted by <span style="background-color: #b5b5b5;border-radius: 6px;padding: 1px 5px;"><a class="nametag" href="{{$post->user->profile->slug}}">{{$post->user->name}}</a></span></p>
+                                <p class="mt-1" style="padding-right: 15px;"><strong><a href="/{{$post->user->profile->slug}}/{{$post->slug}}">{{$post->title}}</a></strong> posted by <span style="background-color: #b5b5b5;border-radius: 6px;padding: 1px 5px;"><a class="nametag" href="/{{$post->user->profile->slug}}">{{$post->user->name}}</a></span></p>
                                 <p class="mt-1" style="padding-right: 15px;">{!! Str::words($post->content, 50, '...') !!}</p>
                             </div>
                         </div>

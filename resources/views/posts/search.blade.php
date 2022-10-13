@@ -24,7 +24,7 @@
                     @endforeach
 
                     <div class="col d-flex justify-content-center mb-5 mt-3 pb-3">
-                        <div class="row list10">{{ $posts->links('pagination::bootstrap-4') }}</div>
+                        <div class="row list10">{{ $posts->withQueryString()->links('pagination::bootstrap-4') }}</div>
                     </div>
 
                 </div>

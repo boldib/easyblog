@@ -7,27 +7,26 @@ use App\Models\Post;
 
 use Illuminate\Support\Str;
 
-class Tagpost
-{
-    public static function sync($tags, Post $post)
-    {
-        if(isset($tags) && $post)
-        { 
-            $tagNames = explode(',',$tags);
-		    $tagIds = [];
-		    $tagcount = 0;
+class Tagpost {
+	public static function sync( $tags, Post $post ) {
+		if ( isset( $tags ) && $post ) {
+			$tagNames = explode( ',', $tags );
+			$tagIds = [];
+			$tagcount = 0;
 
-		    foreach($tagNames as $tagName){
+			foreach ( $tagNames as $tagName ) {
 				$tagcount++;
-                $tag = Tag::firstOrCreate([
-					'title'=> strtolower($tagName),
-					'slug' => Str::of($tagName)->slug(),
-				]);
+				$tag = Tag::firstOrCreate( [ 
+					'title' => strtolower( $tagName ),
+					'slug' => Str::of( $tagName )->slug(),
+				] );
 
-				if($tag) $tagIds[] = $tag->id;
-				if($tagcount == 6) break;
+				if ( $tag )
+					$tagIds[] = $tag->id;
+				if ( $tagcount == 6 )
+					break;
 			}
-            $post->tags()->sync($tagIds);
+			$post->tags()->sync( $tagIds );
 		}
-    }
+	}
 }

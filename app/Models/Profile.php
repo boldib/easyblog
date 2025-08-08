@@ -5,32 +5,31 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model
-{
-    use HasFactory;
+class Profile extends Model {
+	use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'title',
-        'description',
-        'image',
-        'links'
-    ];
-	
-	public function image(){
+	protected $fillable = [ 
+		'name',
+		'slug',
+		'title',
+		'description',
+		'image',
+		'links'
+	];
 
-        $imageSource = ($this->image) ? $this->image : 'default.webp';
+	public function image() {
 
-        if(str_contains($imageSource, 'picsum')) {
-            return $imageSource;
-        }
+		$imageSource = ( $this->image ) ? $this->image : 'default.webp';
 
-		return '/storage/profiles/'.$imageSource;
+		if ( str_contains( $imageSource, 'picsum' ) ) {
+			return $imageSource;
+		}
+
+		return '/storage/profiles/' . $imageSource;
 	}
-	
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
+
+	public function user() {
+		return $this->belongsTo( User::class);
+	}
 
 }

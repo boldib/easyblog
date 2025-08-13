@@ -7,38 +7,46 @@ use App\Models\Post;
 use App\Models\Tag;
 use App\Models\User;
 
-class Infolist {
-	public static function get( string $type, int $num ) {
+class Infolist
+{
+    /**
+     * Render small info lists for sidebar sections.
+     *
+     * Echoes small HTML snippets for users, tags, and comments.
+     */
+    public static function get(string $type, int $num): void
+    {
+        if ($type === 'users') {
+            $users = User::query()->take($num)->get();
 
-		if ( $type == 'users' ) {
+            foreach ($users as $user) {
+                echo '<a href="/' . $user->profile->slug . '"><img class="rounded-circle m-1" width="20px" height="20px" src="' . $user->profile->image() . '">' . $user->name . '</a><br>';
+            }
+        }
 
-			$users = User::all()->take( $num );
+        if ($type === 'tags') {
+            $tags = Tag::query()->take($num)->get();
 
-			foreach ( $users as $user ) {
-				echo '<a href="/' . $user->profile->slug . '"><img class="rounded-circle m-1" width="20px" height="20px" src="' . $user->profile->image() . '">' . $user->name . '</a><br>';
-			}
-		}
+            $count = min($num, $tags->count());
+            for ($i = 0; $i < $count; $i++) {
+                echo '<a href="/tag/' . $tags[$i]->slug . '">' . $tags[$i]->title . '</a><br>';
+            }
+        }
 
-		if ( $type == 'tags' ) {
+        if ($type === 'comments') {
+            $comments = Comment::query()->latest()->take($num)->get();
 
-			$tags = Tag::all()->take( $num );
+            foreach ($comments as $comment) {
+                echo '<a href="/' . $comment->post->user->profile->slug . '/' . $comment->post->slug . '">' . $comment->comment . '</a><br>';
+            }
+        }
+    }
 
-			for ( $i = 0; $i < $num; $i++ ) {
-				echo '<a href="/tag/' . $tags[ $i ]->slug . '">' . $tags[ $i ]->title . '</a><br>';
-			}
-		}
-
-		if ( $type == 'comments' ) {
-
-			$comments = Comment::all()->take( $num );
-
-			foreach ( $comments as $comment ) {
-				echo '<a href="/' . $comment->post->user->profile->slug . '/' . $comment->post->slug . '">' . $comment->comment . '</a><br>';
-			}
-		}
-	}
-
-	public static function postscount() {
-		return Post::count();
-	}
+    /**
+     * Get total posts count.
+     */
+    public static function postscount(): int
+    {
+        return Post::count();
+    }
 }

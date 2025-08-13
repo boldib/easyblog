@@ -2,26 +2,29 @@
 
 namespace App\View\Components;
 
+use Closure;
+use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\View\Component;
 
-class sidebar extends Component
+/**
+ * Sidebar view component.
+ */
+class Sidebar extends Component
 {
     /**
      * Create a new component instance.
-     *
-     * @return void
      */
     public function __construct()
     {
-        //
+        // Intentionally left blank. Add dependencies via constructor if needed.
     }
 
     /**
      * Get the view / contents that represent the component.
      *
-     * @return \Illuminate\Contracts\View\View|\Closure|string
+     * @return ViewContract|Closure|string
      */
-    public function render()
+    public function render(): ViewContract|Closure|string
     {
         return view('components.sidebar');
     }

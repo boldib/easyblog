@@ -3,33 +3,44 @@
 namespace Tests\Unit;
 
 use App\Models\User;
+use App\Models\Profile;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
+    use RefreshDatabase;
     /**
-     * A basic unit test example.
-     *
-     * @return void
+     * Test that a user can edit their own profile.
      */
-    public function test_user_can_edit_own_profile()
+    public function test_user_can_edit_own_profile(): void
     {
-        $user = User::where('id', '2')->first();
+        $user = User::factory()->create();
+        $profile = Profile::factory()->create(['user_id' => $user->id, 'slug' => 'test-user']);
+        $user->setRelation('profile', $profile);
 
         $response = $this->actingAs($user)
-        ->get('/profile/edit/'.$user->profile->slug);
+            ->get('/profile/edit/' . $profile->slug);
 
         $response->assertStatus(200);
     }
 
-    public function test_user_cannot_edit_other_profile()
+    /**
+     * Test that a user cannot edit another user's profile.
+     */
+    public function test_user_cannot_edit_other_profile(): void
     {
-        $user1 = User::where('id', rand(11,User::count()))->first();
-        $user2 = User::where('id', 10)->first();
+        $user1 = User::factory()->create();
+        $user2 = User::factory()->create();
+        
+        $profile1 = Profile::factory()->create(['user_id' => $user1->id, 'slug' => 'user1']);
+        $profile2 = Profile::factory()->create(['user_id' => $user2->id, 'slug' => 'user2']);
+        
+        $user1->setRelation('profile', $profile1);
+        $user2->setRelation('profile', $profile2);
 
-        $this->actingAs($user1);
-
-        $response = $this->get('/profile/edit/'.$user2->profile->slug);
+        $response = $this->actingAs($user1)
+            ->get('/profile/edit/' . $profile2->slug);
 
         $response->assertStatus(403);
     }

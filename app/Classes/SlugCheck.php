@@ -1,35 +1,64 @@
 <?php
 
 namespace App\Classes;
-use Auth;
+
 use App\Models\Profile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
-class SlugCheck {
+/**
+ * Validate and check availability of slugs.
+ */
+class SlugCheck
+{
+    /**
+     * Reserved slugs that cannot be used.
+     */
+    private const FORBIDDEN = [
+        'admin',
+        'search',
+        'terms-of-service',
+        'tos',
+        'tags',
+    ];
 
-	public $word;
+    /**
+     * The raw word to be slugified and validated.
+     */
+    public string $word;
 
-	public function __construct( $word ) {
-		$this->word = $word;
-	}
+    public function __construct(string $word)
+    {
+        $this->word = $word;
+    }
 
-	public function isForbidden() {
-		$array = array( "admin", "search", "terms-of-service", "tos", "tags" );
-		if ( in_array( Str::of( $this->word )->slug(), $array ) ) {
-			return true;
-		}
-	}
+    /**
+     * Determine if the slugified word is forbidden.
+     */
+    public function isForbidden(): bool
+    {
+        $slug = (string) Str::of($this->word)->slug();
 
-	public function isUsed() {
-		$urlExists = Profile::where( 'slug', Str::of( $this->word )->slug() )->first();
-		if ( isset( $urlExists->slug ) ) {
-			if ( $urlExists->user->id != Auth::user()->id ) {
-				return true;
-			}
-		}
-	}
+        return in_array($slug, self::FORBIDDEN, true);
+    }
 
+    /**
+     * Determine if the slug is already used by another user's profile.
+     */
+    public function isUsed(): bool
+    {
+        $slug = (string) Str::of($this->word)->slug();
+        $profile = Profile::where('slug', $slug)->first();
 
+        if ($profile === null) {
+            return false;
+        }
+
+        // If unauthenticated, consider slug used if it exists at all
+        if (! Auth::check()) {
+            return true;
+        }
+
+        return $profile->user->id !== Auth::id();
+    }
 }
-
-?>

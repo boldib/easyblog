@@ -65,8 +65,8 @@ class PostRepository implements PostRepositoryInterface
 
         $post = Post::create([
             'user_id' => (int) Auth::id(),
-            'title' => $data['title'],
-            'content' => $data['content'],
+            'title' => strip_tags(trim($data['title'])),
+            'content' => strip_tags(trim($data['content'])),
             'image' => Imgstore::setPostImage($request->file('image')),
             'slug' => $slug,
         ]);

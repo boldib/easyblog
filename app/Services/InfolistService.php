@@ -40,7 +40,7 @@ class TagsInfolistStrategy extends InfolistStrategy
             $tagSlug = htmlspecialchars($tag->slug, ENT_QUOTES, 'UTF-8');
             $tagTitle = htmlspecialchars($tag->title, ENT_QUOTES, 'UTF-8');
             
-            echo '<a href="/tags/' . $tagSlug . '">' . $tagTitle . '</a><br>';
+            echo '<a href="/tag/' . $tagSlug . '">' . $tagTitle . '</a><br>';
         }
     }
 }

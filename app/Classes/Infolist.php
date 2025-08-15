@@ -29,7 +29,7 @@ class Infolist
 
             $count = min($num, $tags->count());
             for ($i = 0; $i < $count; $i++) {
-                echo '<a href="/tag/' . $tags[$i]->slug . '">' . $tags[$i]->title . '</a><br>';
+                echo '<a href="/tag/' . htmlspecialchars($tags[$i]->slug, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($tags[$i]->title, ENT_QUOTES, 'UTF-8') . '</a><br>';
             }
         }
 
@@ -37,7 +37,7 @@ class Infolist
             $comments = Comment::query()->latest()->take($num)->get();
 
             foreach ($comments as $comment) {
-                echo '<a href="/' . $comment->post->user->profile->slug . '/' . $comment->post->slug . '">' . $comment->comment . '</a><br>';
+                echo '<a href="/' . htmlspecialchars($comment->post->user->profile->slug, ENT_QUOTES, 'UTF-8') . '/' . htmlspecialchars($comment->post->slug, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($comment->comment, ENT_QUOTES, 'UTF-8') . '</a><br>';
             }
         }
     }

@@ -26,7 +26,7 @@
 													class="nametag"
 													href="{{$post->user->profile->slug}}">{{$post->user->name}}</a></span></p>
 										<p class="mt-1" style="padding-right: 15px;">
-											{!! Str::words( $post->content, 50, '...' ) !!}
+											{{ Str::words( $post->content, 50, '...' ) }}
 										</p>
 									</div>
 								</div>

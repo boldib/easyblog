@@ -52,7 +52,7 @@ class ProfileRepository implements ProfileRepositoryInterface {
 			throw new \InvalidArgumentException( 'This URL is already used' );
 		}
 
-		$profile->user->name = strip_tags(trim($data['name']));
+		$profile->user->name = sanitize_required($data['name']);
 		$profile->slug = Str::of( $data['slug'] )->slug();
 
 		// Only update image if a new one was uploaded
@@ -61,7 +61,7 @@ class ProfileRepository implements ProfileRepositoryInterface {
 			$profile->image = $newImage;
 		}
 
-		$profile->description = isset($data['description']) ? strip_tags(trim($data['description'])) : null;
+		$profile->description = sanitize($data['description'] ?? null);
 		$profile->update();
 		$profile->user->update();
 		return $profile;

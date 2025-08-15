@@ -45,7 +45,7 @@ class CommentsController extends Controller
         ]);
 
         $comment = new Comment();
-        $comment->comment = strip_tags(trim($data['comment'])); // Sanitization
+        $comment->comment = sanitize_required($data['comment']); // Sanitization
         $comment->user_id = $user->id;
         $comment->post_id = $post->id;
         $comment->save();

@@ -95,7 +95,7 @@ abstract class ImageProcessor
     {
         Log::info('Image upload attempt', [
             'image_provided' => $image !== null,
-            'image_type' => $image ? get_class($image) : 'null',
+            'image_type' => $image ? (is_object($image) ? get_class($image) : gettype($image)) : 'null',
             'original_name' => method_exists($image, 'getClientOriginalName') ? $image->getClientOriginalName() : 'N/A',
             'size' => method_exists($image, 'getSize') ? $image->getSize() : 'N/A',
             'mime_type' => method_exists($image, 'getMimeType') ? $image->getMimeType() : 'N/A'

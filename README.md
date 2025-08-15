@@ -182,4 +182,4 @@ This project is open-source software licensed under the [MIT license](https://op
 
 ---
 
-**EasyBlog** - A secure, modern blog engine demonstrating Laravel best practices, design patterns,comprehensive security measures, professional code standards, and unit tests.
+**EasyBlog** - A secure, modern blog engine demonstrating Laravel best practices, design patterns, comprehensive security measures, professional code standards, and unit tests.

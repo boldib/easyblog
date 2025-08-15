@@ -46,10 +46,10 @@ class ProfileRepository implements ProfileRepositoryInterface {
 		}
 
 		$data = request()->validate( [ 
-			'name' => [ 'required', 'max:32' ],
-			'description' => 'nullable|max:10000',
-			'slug' => [ 'required', 'max:32' ],
-			'image' => 'nullable|image|max:1024',
+			'name' => 'required|string|min:2|max:32',
+			'description' => 'nullable|string|max:10000',
+			'slug' => 'required|string|min:3|max:32|alpha_dash',
+			'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:1024|dimensions:max_width=2000,max_height=2000',
 		] );
 
 		$slugCheck = new SlugCheck( $data['slug'] );
@@ -57,7 +57,7 @@ class ProfileRepository implements ProfileRepositoryInterface {
 			throw new \InvalidArgumentException( 'This URL is already used' );
 		}
 
-		$profile->user->name = $data['name'];
+		$profile->user->name = strip_tags(trim($data['name']));
 		$profile->slug = Str::of( $data['slug'] )->slug();
 
 		// Only update image if a new one was uploaded
@@ -66,7 +66,7 @@ class ProfileRepository implements ProfileRepositoryInterface {
 			$profile->image = $newImage;
 		}
 
-		$profile->description = ( isset( $data['description'] ) ) ? $data['description'] : null;
+		$profile->description = isset($data['description']) ? strip_tags(trim($data['description'])) : null;
 		$profile->update();
 		$profile->user->update();
 		return $profile;

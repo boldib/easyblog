@@ -59,7 +59,7 @@
 					@foreach( $post->comments->sortByDesc( 'id' ) as $comment )
 						<p class="bg-light pt-2 pb-2"><span
 								class="bg-warning p-2">{{$comment->created_at->format( 'd-m-Y H:m' )}}</span><span
-								class="bg-secondary p-2"><a class="nametag"
+								class="bg-secondary p-2"><a class="profile-link"
 									href="/{{$comment->user->profile->slug}}">{{$comment->user->name}}</a></span><span
 								class="bg-light p-2">{{$comment->comment}}</p>
 					@endforeach

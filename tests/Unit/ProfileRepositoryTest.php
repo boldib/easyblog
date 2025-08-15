@@ -150,8 +150,8 @@ class ProfileRepositoryTest extends TestCase
             'slug' => 'admin', // Forbidden slug
         ]);
         
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('This URL is already used');
+        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $this->expectExceptionMessage('This URL is already used or forbidden.');
         
         $this->repository->update($request, $this->profile->slug, $this->user);
     }
@@ -170,8 +170,8 @@ class ProfileRepositoryTest extends TestCase
             'slug' => 'existing-slug',
         ]);
         
-        $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('This URL is already used');
+        $this->expectException(\Illuminate\Validation\ValidationException::class);
+        $this->expectExceptionMessage('This URL is already used or forbidden.');
         
         $this->repository->update($request, $this->profile->slug, $this->user);
     }

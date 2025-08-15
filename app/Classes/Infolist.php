@@ -22,7 +22,7 @@ class Infolist
             foreach ($users as $user) {
                 if ($user->profile && $user->profile->slug) {
                     $imageUrl = method_exists($user->profile, 'image') ? $user->profile->image() : '/images/default-avatar.png';
-                    echo '<a href="/' . htmlspecialchars($user->profile->slug, ENT_QUOTES, 'UTF-8') . '"><img class="rounded-circle m-1" width="20px" height="20px" src="' . htmlspecialchars($imageUrl, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8') . '</a><br>';
+                    echo '<a href="/' . e($user->profile->slug) . '"><img class="rounded-circle m-1" width="20px" height="20px" src="' . e($imageUrl) . '">' . e($user->name) . '</a><br>';
                 }
             }
         }
@@ -33,7 +33,7 @@ class Infolist
             $count = min($num, $tags->count());
             for ($i = 0; $i < $count; $i++) {
                 if (isset($tags[$i]) && $tags[$i]->slug && $tags[$i]->title) {
-                    echo '<a href="/tag/' . htmlspecialchars($tags[$i]->slug, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($tags[$i]->title, ENT_QUOTES, 'UTF-8') . '</a><br>';
+                    echo '<a href="/tag/' . e($tags[$i]->slug) . '">' . e($tags[$i]->title) . '</a><br>';
                 }
             }
         }
@@ -53,9 +53,9 @@ class Infolist
                     $comment->post->slug &&
                     $comment->comment) {
                     
-                    $profileSlug = htmlspecialchars($comment->post->user->profile->slug, ENT_QUOTES, 'UTF-8');
-                    $postSlug = htmlspecialchars($comment->post->slug, ENT_QUOTES, 'UTF-8');
-                    $commentText = htmlspecialchars($comment->comment, ENT_QUOTES, 'UTF-8');
+                    $profileSlug = e($comment->post->user->profile->slug);
+                    $postSlug = e($comment->post->slug);
+                    $commentText = e($comment->comment);
                     
                     echo '<a href="/' . $profileSlug . '/' . $postSlug . '">' . $commentText . '</a><br>';
                 }

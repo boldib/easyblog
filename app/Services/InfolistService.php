@@ -21,8 +21,8 @@ class UsersInfolistStrategy extends InfolistStrategy
         foreach ($users as $user) {
             if ($user->profile && $user->profile->slug) {
                 $imageUrl = method_exists($user->profile, 'image') ? $user->profile->image() : '/images/default-avatar.png';
-                $profileSlug = htmlspecialchars($user->profile->slug, ENT_QUOTES, 'UTF-8');
-                $userName = htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8');
+                $profileSlug = e($user->profile->slug);
+                $userName = e($user->name);
                 
                 echo '<a href="/' . $profileSlug . '"><img src="' . $imageUrl . '" alt="' . $userName . '" style="width:20px;height:20px;border-radius:50%;"> ' . $userName . '</a><br>';
             }
@@ -37,8 +37,8 @@ class TagsInfolistStrategy extends InfolistStrategy
         $tags = Tag::query()->take($num)->get();
 
         foreach ($tags as $tag) {
-            $tagSlug = htmlspecialchars($tag->slug, ENT_QUOTES, 'UTF-8');
-            $tagTitle = htmlspecialchars($tag->title, ENT_QUOTES, 'UTF-8');
+            $tagSlug = e($tag->slug);
+            $tagTitle = e($tag->title);
             
             echo '<a href="/tag/' . $tagSlug . '">' . $tagTitle . '</a><br>';
         }
@@ -53,9 +53,9 @@ class CommentsInfolistStrategy extends InfolistStrategy
 
         foreach ($comments as $comment) {
             if ($comment->post && $comment->post->user && $comment->post->user->profile) {
-                $profileSlug = htmlspecialchars($comment->post->user->profile->slug, ENT_QUOTES, 'UTF-8');
-                $postSlug = htmlspecialchars($comment->post->slug, ENT_QUOTES, 'UTF-8');
-                $commentText = htmlspecialchars($comment->comment, ENT_QUOTES, 'UTF-8');
+                $profileSlug = e($comment->post->user->profile->slug);
+                $postSlug = e($comment->post->slug);
+                $commentText = e($comment->comment);
                 
                 echo '<a href="/' . $profileSlug . '/' . $postSlug . '">' . $commentText . '</a><br>';
             }

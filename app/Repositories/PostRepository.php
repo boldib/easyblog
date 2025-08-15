@@ -54,8 +54,8 @@ class PostRepository implements PostRepositoryInterface
 
         $post = Post::create([
             'user_id' => (int) Auth::id(),
-            'title' => strip_tags(trim($data['title'])),
-            'content' => strip_tags(trim($data['content'])),
+            'title' => sanitize_required($data['title']),
+            'content' => sanitize_required($data['content']),
             'image' => ImageService::setPostImage($request->file('image')),
             'slug' => $slug,
         ]);
@@ -86,8 +86,8 @@ class PostRepository implements PostRepositoryInterface
         $newSlug = SlugService::generateUniquePostSlug($data['title'], $postId);
 
         $post->update([
-            'title' => strip_tags(trim($data['title'])),
-            'content' => strip_tags(trim($data['content'])),
+            'title' => sanitize_required($data['title']),
+            'content' => sanitize_required($data['content']),
             'image' => $request->hasFile('image') ? ImageService::setPostImage($request->file('image')) : $post->image,
             'slug' => $newSlug,
         ]);

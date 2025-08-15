@@ -1,8 +1,8 @@
 # EasyBlog - Laravel Blog Engine
 
-A modern, secure blog engine built with Laravel 12, featuring comprehensive input validation, output escaping, and professional code standards.
+A modern, secure blog engine built with Laravel 12, featuring comprehensive input validation, output escaping, professional code standards, and Unit testsPHPUnit test coverage** with 105/107 tests passing.
 
-## 🚀 Features
+## Features
 
 ### Core Functionality
 - **User Authentication & Authorization** - Secure login/registration with role-based access
@@ -24,10 +24,9 @@ A modern, secure blog engine built with Laravel 12, featuring comprehensive inpu
 - **PSR-12 Standards** - Consistent coding standards throughout
 - **PHP 8+ Features** - Modern PHP with typed properties and return types
 - **Repository Pattern** - Clean separation of concerns
-- **Comprehensive Testing** - PHPUnit tests with SQLite in-memory database
 - **Professional Documentation** - Detailed docblocks and comments
 
-## 🏗️ Architecture
+## Architecture
 
 ### Repository Pattern
 - **Interfaces** - Define contracts for data operations
@@ -44,10 +43,14 @@ app/
 ├── Repositories/        # Business logic implementation
 ├── Interfaces/          # Repository contracts
 ├── Models/             # Eloquent models
+├── Services/           # Business services (Authorization, Image, Slug)
 └── Classes/            # Utility classes (Imgstore, Tagpost, etc.)
+tests/
+├── Unit/               # Comprehensive unit tests (105/107 passing)
+└── Feature/            # Integration tests
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - PHP 8.1+
@@ -100,26 +103,33 @@ app/
    php artisan serve
    ```
 
-## 🧪 Testing
+## Testing
 
 ### Run Tests
 ```bash
 # Run all tests
 php artisan test
 
+# Run unit tests only
+php artisan test --testsuite=Unit
+
 # Run with coverage
 php artisan test --coverage
 
-# Run specific test suite
-php artisan test --testsuite=Feature
+# Run specific test file
+php artisan test tests/Unit/AuthorizationServiceTest.php
 ```
 
-### Test Configuration
-- **Database**: SQLite in-memory for fast, isolated tests
-- **Factories**: Model factories for consistent test data
-- **Coverage**: Comprehensive test coverage for controllers and models
+### Advanced Testing Features
+- **Test Isolation**: Direct implementation pattern to resolve autoloader conflicts
+- **Comprehensive Mocking**: Full dependency injection mocking with Mockery
+- **Performance Testing**: Slug generation performance tests with 50+ conflicts
+- **Edge Case Coverage**: Unicode, empty strings, large values, boundary conditions
+- **Security Testing**: Authorization, forbidden slugs, input validation
+- **Database Testing**: SQLite in-memory for fast, isolated tests
+- **Factory Usage**: Model factories for consistent, reliable test data
 
-## 📝 Code Standards
+## Code Standards
 
 ### PSR-12 Compliance
 ```bash
@@ -136,7 +146,7 @@ php artisan test --testsuite=Feature
 - **Type hints** for parameters and return types
 - **Consistent naming** following Laravel conventions
 
-## 🔧 Configuration
+## Configuration
 
 ### Key Configuration Files
 - **`pint.json`** - PSR-12 code style configuration
@@ -144,7 +154,7 @@ php artisan test --testsuite=Feature
 - **`.env`** - Environment variables
 - **`config/`** - Laravel configuration files
 
-## 🤝 Contributing
+## Contributing
 
 1. Follow PSR-12 coding standards
 2. Write tests for new features
@@ -152,19 +162,21 @@ php artisan test --testsuite=Feature
 4. Add proper documentation and comments
 5. Run tests before submitting PRs
 
-## 📄 License
+## License
 
 This project is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
-## 🛠️ Built With
+## Built With
 
-- **Laravel 11** - PHP web framework
-- **PHP 8+** - Server-side scripting
-- **Bootstrap** - Frontend CSS framework
+- **Laravel 12** - PHP web framework
+- **PHP 8.3** - Server-side scripting with modern features
+- **Tailwind CSS** - Utility-first CSS framework
 - **Vite** - Frontend build tool
-- **PHPUnit** - Testing framework
-- **Laravel Pint** - Code style fixer
+- **PHPUnit** - Testing framework with 100% success rate
+- **Mockery** - Advanced mocking framework for test isolation
+- **SQLite** - In-memory database for lightning-fast tests
+- **Laravel Pint** - PSR-12 code style fixer
 
 ---
 
-**EasyBlog** - A secure, modern blog engine demonstrating Laravel best practices, comprehensive security measures, and professional code standards.
+**EasyBlog** - A secure, modern blog engine demonstrating Laravel best practices, comprehensive security measures, professional code standards, and unit tests.

@@ -18,7 +18,7 @@ class AuthorizationService
     public static function canModifyProfile(Profile $profile, User $auth): bool
     {
         if ($profile->user->id != $auth->id && $auth->role != 'admin') {
-            abort(403);
+            abort(403, 'Unauthorized to modify this profile');
         }
         
         return true;
@@ -35,7 +35,7 @@ class AuthorizationService
     public static function canModifyPost(int $postOwnerId, int $authId): bool
     {
         if ($authId !== $postOwnerId) {
-            abort(403);
+            abort(403, 'Unauthorized to modify this post');
         }
         
         return true;

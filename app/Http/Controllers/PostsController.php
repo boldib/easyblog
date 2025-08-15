@@ -22,6 +22,7 @@ class PostsController extends Controller
     public function __construct(
         private PostRepositoryInterface $postRepository,
     ) {
+        $this->middleware('post.owner')->only(['edit', 'update', 'delete']);
     }
 
     /**

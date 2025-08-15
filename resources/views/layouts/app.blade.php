@@ -16,31 +16,8 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
-    <style>
-        .nametag{
-            text-decoration: none;
-            color: #343434;
-        }
-
-        .nametag:hover{
-            text-decoration: none;
-            color: #343434;
-        }
-
-        .card a{
-            color: #525252;
-            text-decoration: none;
-        }
-        
-        .tags a{
-            color: #525252;
-            text-decoration: none;
-        }
-        
-    </style>
-
 </head>
-<body style="background-image: url('/storage/pexels-wallpaper.webp'); background-size: cover; background-attachment: fixed;">
+<body>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">

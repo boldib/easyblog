@@ -24,7 +24,7 @@
 													href="{{$post->user->profile->slug}}/{{$post->slug}}">{{$post->title}}</a></strong>
 											posted by <span
 												style="background-color: #b5b5b5;border-radius: 6px;padding: 1px 5px;"><a
-													class="nametag"
+													class="profile-link"
 													href="{{$post->user->profile->slug}}">{{$post->user->name}}</a></span></p>
 										<p class="mt-1" style="padding-right: 15px;">
 											{{ Str::words( $post->content, 50, '...' ) }}

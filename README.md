@@ -1,6 +1,6 @@
 # EasyBlog - Laravel Blog Engine
 
-A modern, secure blog engine built with Laravel 11, featuring comprehensive input validation, output escaping, and professional code standards.
+A modern, secure blog engine built with Laravel 12, featuring comprehensive input validation, output escaping, and professional code standards.
 
 ## 🚀 Features
 

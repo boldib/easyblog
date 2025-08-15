@@ -27,6 +27,16 @@ interface PostRepositoryInterface
     public function store(Request $request): string;
 
     /**
+     * Get a post for editing by its ID.
+     */
+    public function edit(int $postId): Post;
+
+    /**
+     * Update an existing post.
+     */
+    public function update(Request $request, int $postId): Post;
+
+    /**
      * Delete a post by id if the authenticated user is the owner.
      */
     public function delete(int $postId, int $authId): bool;

@@ -79,6 +79,54 @@ class PostRepository implements PostRepositoryInterface
     /**
      * {@inheritdoc}
      */
+    public function edit(int $postId): Post
+    {
+        return Post::where('id', $postId)->firstOrFail();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function update(Request $request, int $postId): Post
+    {
+        $post = Post::where('id', $postId)->firstOrFail();
+
+        $data = $request->validate([
+            'title' => 'required|string|min:3|max:255',
+            'content' => 'required|string|min:10|max:50000',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:1024|dimensions:max_width=2000,max_height=2000',
+            'tags' => ['nullable', 'string', 'max:150'],
+        ]);
+
+        // Generate unique slug if title changed
+        $newSlug = Str::of($data['title'])->slug();
+        if ($newSlug !== $post->slug) {
+            $baseSlug = $newSlug;
+            $counter = 1;
+            
+            // Check for slug uniqueness and append counter if needed
+            while (Post::where('slug', $newSlug)->where('id', '!=', $postId)->exists()) {
+                $newSlug = $baseSlug . '-' . $counter;
+                $counter++;
+            }
+        }
+
+        $post->update([
+            'title' => strip_tags(trim($data['title'])), // Sanitization
+            'content' => strip_tags(trim($data['content'])), // Sanitization
+            'image' => $request->hasFile('image') ? Imgstore::setPostImage($request->file('image')) : $post->image,
+            'slug' => $newSlug,
+        ]);
+
+        // Update tags
+        Tagpost::sync($data['tags'] ?? null, $post);
+
+        return $post;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function delete(int $postId, int $authId): bool
     {
         $post = Post::where('id', $postId)->firstOrFail();

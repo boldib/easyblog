@@ -88,10 +88,11 @@
 					<div class="card mt-2">
 						<div class="card-header p-2">Manage post:</div>
 						<div class="card-body">
+							<a href="/post/edit/{{$post->id}}" class="btn btn-primary btn-sm mb-2 text-light">Edit</a>
 							<form action="/post/delete/{{$post->id}}" method="post">
 								@csrf
 								@method( 'DELETE' )
-								<button type="submit">Delete</button>
+								<button type="submit" class="btn btn-danger btn-sm">Delete</button>
 							</form>
 						</div>
 					</div>

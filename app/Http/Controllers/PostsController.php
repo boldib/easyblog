@@ -67,6 +67,35 @@ class PostsController extends Controller
     }
 
     /**
+     * Show the form for editing a post.
+     *
+     * @param int $postId The ID of the post to edit
+     *
+     * @return ViewContract
+     */
+    public function edit(int $postId): ViewContract
+    {
+        $post = $this->postRepository->edit($postId);
+
+        return view('posts.edit', compact('post'));
+    }
+
+    /**
+     * Update an existing post.
+     *
+     * @param Request $request The incoming HTTP request
+     * @param int $postId The ID of the post to update
+     *
+     * @return RedirectResponse
+     */
+    public function update(Request $request, int $postId): RedirectResponse
+    {
+        $post = $this->postRepository->update($request, $postId);
+
+        return redirect('/' . $post->user->profile->slug . '/' . $post->slug);
+    }
+
+    /**
      * Remove the specified post from storage.
      *
      * @param int $postId The ID of the post to delete

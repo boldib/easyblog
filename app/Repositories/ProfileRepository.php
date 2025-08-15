@@ -49,7 +49,9 @@ class ProfileRepository implements ProfileRepositoryInterface {
 
 		$slugCheck = new SlugCheck( $data['slug'] );
 		if ( $slugCheck->isForbidden() || $slugCheck->isUsed() ) {
-			throw new \InvalidArgumentException( 'This URL is already used' );
+			throw \Illuminate\Validation\ValidationException::withMessages([
+				'slug' => 'This URL is already used or forbidden.'
+			]);
 		}
 
 		$profile->user->name = sanitize_required($data['name']);

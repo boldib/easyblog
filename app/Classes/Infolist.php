@@ -17,10 +17,13 @@ class Infolist
     public static function get(string $type, int $num): void
     {
         if ($type === 'users') {
-            $users = User::query()->take($num)->get();
+            $users = User::query()->with('profile')->take($num)->get();
 
             foreach ($users as $user) {
-                echo '<a href="/' . $user->profile->slug . '"><img class="rounded-circle m-1" width="20px" height="20px" src="' . $user->profile->image() . '">' . $user->name . '</a><br>';
+                if ($user->profile && $user->profile->slug) {
+                    $imageUrl = method_exists($user->profile, 'image') ? $user->profile->image() : '/images/default-avatar.png';
+                    echo '<a href="/' . htmlspecialchars($user->profile->slug, ENT_QUOTES, 'UTF-8') . '"><img class="rounded-circle m-1" width="20px" height="20px" src="' . htmlspecialchars($imageUrl, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8') . '</a><br>';
+                }
             }
         }
 
@@ -29,15 +32,33 @@ class Infolist
 
             $count = min($num, $tags->count());
             for ($i = 0; $i < $count; $i++) {
-                echo '<a href="/tag/' . htmlspecialchars($tags[$i]->slug, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($tags[$i]->title, ENT_QUOTES, 'UTF-8') . '</a><br>';
+                if (isset($tags[$i]) && $tags[$i]->slug && $tags[$i]->title) {
+                    echo '<a href="/tag/' . htmlspecialchars($tags[$i]->slug, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($tags[$i]->title, ENT_QUOTES, 'UTF-8') . '</a><br>';
+                }
             }
         }
 
         if ($type === 'comments') {
-            $comments = Comment::query()->latest()->take($num)->get();
+            $comments = Comment::query()
+                ->with(['post.user.profile', 'post'])
+                ->latest()
+                ->take($num)
+                ->get();
 
             foreach ($comments as $comment) {
-                echo '<a href="/' . htmlspecialchars($comment->post->user->profile->slug, ENT_QUOTES, 'UTF-8') . '/' . htmlspecialchars($comment->post->slug, ENT_QUOTES, 'UTF-8') . '">' . htmlspecialchars($comment->comment, ENT_QUOTES, 'UTF-8') . '</a><br>';
+                if ($comment->post && 
+                    $comment->post->user && 
+                    $comment->post->user->profile && 
+                    $comment->post->user->profile->slug && 
+                    $comment->post->slug &&
+                    $comment->comment) {
+                    
+                    $profileSlug = htmlspecialchars($comment->post->user->profile->slug, ENT_QUOTES, 'UTF-8');
+                    $postSlug = htmlspecialchars($comment->post->slug, ENT_QUOTES, 'UTF-8');
+                    $commentText = htmlspecialchars($comment->comment, ENT_QUOTES, 'UTF-8');
+                    
+                    echo '<a href="/' . $profileSlug . '/' . $postSlug . '">' . $commentText . '</a><br>';
+                }
             }
         }
     }

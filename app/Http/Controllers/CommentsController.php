@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +11,15 @@ use Illuminate\Support\Carbon;
 
 class CommentsController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('comment.owner')->only(['edit', 'update', 'delete']);
+    }
+
     /**
      * Create a new comment for a post.
      */
@@ -25,16 +33,19 @@ class CommentsController extends Controller
             ->count();
 
         if ($comments >= 10) {
-            $error = 'You have been reached your daily comment limit.';
-            return view('error', compact('error'));
+            return redirect()->back()->withErrors([
+                'comment' => 'You have reached your daily comment limit of 10 comments. Please try again tomorrow.'
+            ]);
         }
 
         $post = Post::where('id', $request->id)->firstOrFail();
 
-        $data = $request->validate(['comment' => 'required']);
+        $data = $request->validate([
+            'comment' => 'required|string|min:3|max:1000',
+        ]);
 
         $comment = new Comment();
-        $comment->comment = $data['comment'];
+        $comment->comment = strip_tags(trim($data['comment'])); // Sanitization
         $comment->user_id = $user->id;
         $comment->post_id = $post->id;
         $comment->save();
@@ -49,13 +60,10 @@ class CommentsController extends Controller
     {
         $comment = Comment::where('id', $id)->firstOrFail();
         $post = Post::where('id', $comment->post_id)->firstOrFail();
-        $user = User::where('id', $post->user_id)->firstOrFail();
-
-        if (auth()->user()->id == $comment->user_id || auth()->user()->role == 'admin') {
-            $comment->delete();
-            return redirect('/' . $post->user->profile->slug . '/' . $post->slug);
-        }
-
-        return redirect('/');
+        
+        $comment->delete();
+        
+        return redirect('/' . $post->user->profile->slug . '/' . $post->slug)
+            ->with('success', 'Comment deleted successfully.');
     }
 }

@@ -22,6 +22,7 @@ class PostsController extends Controller
     public function __construct(
         private PostRepositoryInterface $postRepository,
     ) {
+        $this->middleware('post.owner')->only(['edit', 'update', 'delete']);
     }
 
     /**
@@ -63,6 +64,35 @@ class PostsController extends Controller
         $redirectTo = $this->postRepository->store($request);
 
         return redirect($redirectTo);
+    }
+
+    /**
+     * Show the form for editing a post.
+     *
+     * @param int $postId The ID of the post to edit
+     *
+     * @return ViewContract
+     */
+    public function edit(int $postId): ViewContract
+    {
+        $post = $this->postRepository->edit($postId);
+
+        return view('posts.edit', compact('post'));
+    }
+
+    /**
+     * Update an existing post.
+     *
+     * @param Request $request The incoming HTTP request
+     * @param int $postId The ID of the post to update
+     *
+     * @return RedirectResponse
+     */
+    public function update(Request $request, int $postId): RedirectResponse
+    {
+        $post = $this->postRepository->update($request, $postId);
+
+        return redirect('/' . $post->user->profile->slug . '/' . $post->slug);
     }
 
     /**

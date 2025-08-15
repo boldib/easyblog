@@ -1,6 +1,6 @@
 # EasyBlog - Laravel Blog Engine
 
-A modern, secure blog engine built with Laravel 12, featuring comprehensive input validation, output escaping, professional code standards, and Unit testsPHPUnit test coverage** with 105/107 tests passing.
+A modern, secure blog engine built with Laravel 12, featuring comprehensive input validation, output escaping, professional code standards, design patterns, global helper functions, and unit tests.
 
 ## Features
 
@@ -13,8 +13,8 @@ A modern, secure blog engine built with Laravel 12, featuring comprehensive inpu
 - **Image Upload** - Secure image handling with validation and processing
 
 ### Security Features
-- **Input Sanitization** - Built-in PHP sanitization using `strip_tags()` and `trim()`
-- **Output Escaping** - Comprehensive XSS protection in all Blade templates
+- **Input Sanitization** - Global helper functions (`sanitize()`, `sanitize_required()`) for consistent data cleaning
+- **Output Escaping** - Laravel's `e()` helper for XSS protection in all templates
 - **CSRF Protection** - Laravel's built-in CSRF tokens on all forms
 - **Ownership Middleware** - Granular authorization for posts, comments, and profiles
 - **Rate Limiting** - Comment spam protection (10 comments per user per day)
@@ -24,7 +24,9 @@ A modern, secure blog engine built with Laravel 12, featuring comprehensive inpu
 - **PSR-12 Standards** - Consistent coding standards throughout
 - **PHP 8+ Features** - Modern PHP with typed properties and return types
 - **Repository Pattern** - Clean separation of concerns
+- **DRY Principles** - Global helper functions eliminate code duplication
 - **Professional Documentation** - Detailed docblocks and comments
+- **Improved Error Handling** - ValidationException for better user experience
 
 ## Architecture
 
@@ -44,9 +46,10 @@ app/
 ├── Interfaces/          # Repository contracts
 ├── Models/             # Eloquent models
 ├── Services/           # Business services (Authorization, Image, Slug)
-└── Classes/            # Utility classes (Imgstore, Tagpost, etc.)
+├── Classes/            # Utility classes (Imgstore, Tagpost, etc.)
+└── helpers.php         # Global helper functions (sanitize, sanitize_required)
 tests/
-├── Unit/               # Comprehensive unit tests (105/107 passing)
+├── Unit/               # Comprehensive unit tests
 └── Feature/            # Integration tests
 ```
 
@@ -179,4 +182,4 @@ This project is open-source software licensed under the [MIT license](https://op
 
 ---
 
-**EasyBlog** - A secure, modern blog engine demonstrating Laravel best practices, comprehensive security measures, professional code standards, and unit tests.
+**EasyBlog** - A secure, modern blog engine demonstrating Laravel best practices, design patterns,comprehensive security measures, professional code standards, and unit tests.

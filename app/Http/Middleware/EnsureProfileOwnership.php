@@ -23,7 +23,7 @@ class EnsureProfileOwnership
         }
 
         // Get profile slug from route parameter
-        $profileSlug = $request->route('profileSlug') ?? $request->route('slug');
+        $profileSlug = $request->route('profileslug') ?? $request->route('slug');
         
         if (!$profileSlug) {
             abort(400, 'Profile slug not found in route.');

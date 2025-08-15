@@ -2,14 +2,16 @@
 
 namespace App\Repositories;
 
-use App\Classes\Imgstore;
 use App\Classes\SlugCheck;
+use App\Classes\ValidationRuleFactory;
 use App\Interfaces\ProfileRepositoryInterface;
 use App\Models\Post;
 use App\Models\Profile;
 use App\Models\User;
-use Illuminate\Http\Request;
+use App\Services\AuthorizationService;
+use App\Services\ImageService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProfileRepository implements ProfileRepositoryInterface {
@@ -41,16 +43,9 @@ class ProfileRepository implements ProfileRepositoryInterface {
 	 */
 	public function update( Request $request, string $profileSlug, User $auth ): Profile {
 		$profile = Profile::where( 'slug', $profileSlug )->firstorFail();
-		if ( $profile->user->id != $auth->id && $auth->role != 'admin' ) {
-			abort( 403 );
-		}
+		AuthorizationService::canModifyProfile($profile, $auth);
 
-		$data = request()->validate( [ 
-			'name' => 'required|string|min:2|max:32',
-			'description' => 'nullable|string|max:10000',
-			'slug' => 'required|string|min:3|max:32|alpha_dash',
-			'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:1024|dimensions:max_width=2000,max_height=2000',
-		] );
+		$data = request()->validate(ValidationRuleFactory::getProfileRules());
 
 		$slugCheck = new SlugCheck( $data['slug'] );
 		if ( $slugCheck->isForbidden() || $slugCheck->isUsed() ) {
@@ -61,7 +56,7 @@ class ProfileRepository implements ProfileRepositoryInterface {
 		$profile->slug = Str::of( $data['slug'] )->slug();
 
 		// Only update image if a new one was uploaded
-		$newImage = Imgstore::setProfileImage( $request->file( 'image' ) );
+		$newImage = ImageService::setProfileImage( $request->file( 'image' ) );
 		if ( $newImage !== null ) {
 			$profile->image = $newImage;
 		}
@@ -78,9 +73,7 @@ class ProfileRepository implements ProfileRepositoryInterface {
 	public function delete( int $id, User $auth ): bool {
 		$profile = Profile::where( 'id', $id )->firstOrFail();
 		$user = User::where( 'id', $profile->user->id )->firstOrFail();
-		if ( $profile->user->id != $auth->id && $auth->role != 'admin' ) {
-			abort( 403 );
-		}
+		AuthorizationService::canModifyProfile($profile, $auth);
 
 		$user->posts()->delete();
 		$user->likes()->delete();

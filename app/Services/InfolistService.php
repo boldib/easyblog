@@ -2,70 +2,27 @@
 
 namespace App\Services;
 
-use App\Models\User;
-use App\Models\Tag;
-use App\Models\Comment;
 use App\Models\Post;
+use App\Services\Infolist\Strategies\UsersInfolistStrategy;
+use App\Services\Infolist\Strategies\TagsInfolistStrategy;
+use App\Services\Infolist\Strategies\CommentsInfolistStrategy;
+use App\Services\Infolist\InfolistStrategy;
+use InvalidArgumentException;
 
-abstract class InfolistStrategy
-{
-    abstract public function render(int $num): void;
-}
-
-class UsersInfolistStrategy extends InfolistStrategy
-{
-    public function render(int $num): void
-    {
-        $users = User::query()->with('profile')->take($num)->get();
-
-        foreach ($users as $user) {
-            if ($user->profile && $user->profile->slug) {
-                $imageUrl = method_exists($user->profile, 'image') ? $user->profile->image() : '/images/default-avatar.png';
-                $profileSlug = e($user->profile->slug);
-                $userName = e($user->name);
-                
-                echo '<a href="/' . $profileSlug . '"><img src="' . $imageUrl . '" alt="' . $userName . '" style="width:20px;height:20px;border-radius:50%;"> ' . $userName . '</a><br>';
-            }
-        }
-    }
-}
-
-class TagsInfolistStrategy extends InfolistStrategy
-{
-    public function render(int $num): void
-    {
-        $tags = Tag::query()->take($num)->get();
-
-        foreach ($tags as $tag) {
-            $tagSlug = e($tag->slug);
-            $tagTitle = e($tag->title);
-            
-            echo '<a href="/tag/' . $tagSlug . '">' . $tagTitle . '</a><br>';
-        }
-    }
-}
-
-class CommentsInfolistStrategy extends InfolistStrategy
-{
-    public function render(int $num): void
-    {
-        $comments = Comment::query()->with(['post.user.profile'])->take($num)->get();
-
-        foreach ($comments as $comment) {
-            if ($comment->post && $comment->post->user && $comment->post->user->profile) {
-                $profileSlug = e($comment->post->user->profile->slug);
-                $postSlug = e($comment->post->slug);
-                $commentText = e($comment->comment);
-                
-                echo '<a href="/' . $profileSlug . '/' . $postSlug . '">' . $commentText . '</a><br>';
-            }
-        }
-    }
-}
-
+/**
+ * Service for rendering information lists in sidebar sections.
+ * 
+ * This service uses the Strategy pattern to handle different types
+ * of information lists (users, tags, comments) in a maintainable way.
+ */
 class InfolistService
 {
-    private static array $strategies = [
+    /**
+     * Available strategy mappings.
+     *
+     * @var array<string, class-string<InfolistStrategy>>
+     */
+    private array $strategies = [
         'users' => UsersInfolistStrategy::class,
         'tags' => TagsInfolistStrategy::class,
         'comments' => CommentsInfolistStrategy::class,
@@ -75,19 +32,60 @@ class InfolistService
      * Render small info lists for sidebar sections.
      *
      * Echoes small HTML snippets for users, tags, and comments.
+     *
+     * @param string $type The type of infolist to render (users, tags, comments)
+     * @param int $num Number of items to display
+     * @return void
+     * @throws InvalidArgumentException When an invalid type is provided
      */
-    public static function get(string $type, int $num): void
+    public function render(string $type, int $num): void
     {
-        if (!isset(self::$strategies[$type])) {
-            return;
+        if (!isset($this->strategies[$type])) {
+            throw new InvalidArgumentException("Invalid infolist type: {$type}");
         }
 
-        $strategy = new self::$strategies[$type]();
+        $strategyClass = $this->strategies[$type];
+        $strategy = new $strategyClass();
         $strategy->render($num);
     }
 
     /**
+     * Get available infolist types.
+     *
+     * @return array<string>
+     */
+    public function getAvailableTypes(): array
+    {
+        return array_keys($this->strategies);
+    }
+
+    /**
+     * Register a new strategy.
+     *
+     * @param string $type
+     * @param class-string<InfolistStrategy> $strategyClass
+     * @return void
+     */
+    public function registerStrategy(string $type, string $strategyClass): void
+    {
+        $this->strategies[$type] = $strategyClass;
+    }
+
+    // Backward compatibility static methods
+    // These will be deprecated in future versions
+    
+    /**
+     * @deprecated Use dependency injection instead
+     */
+    public static function get(string $type, int $num): void
+    {
+        $service = new self();
+        $service->render($type, $num);
+    }
+
+    /**
      * Get total posts count.
+     * @deprecated Use dependency injection instead
      */
     public static function postscount(): int
     {

@@ -194,7 +194,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\InfolistServiceProvider::class,
+
 
     ],
 
@@ -210,7 +210,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        'Infolist' => App\Classes\Infolist::class,
+
     ])->toArray(),
 
 ];

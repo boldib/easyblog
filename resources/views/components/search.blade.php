@@ -1,7 +1,30 @@
-<div class="card">
+<section class="card" aria-labelledby="search-heading">
     <div class="card-body">
-        <form action="{{route('search')}}">
-            <span class="d-flex"><input class="col-sm-11" type="text" placeholder="Search.." name="s"><button style="border: none;background-color: white;" class="col-sm-1" type="submit">🔎</button></span>
+        <h3 id="search-heading" class="visually-hidden">Search Posts</h3>
+        <form action="{{route('search')}}" role="search" aria-label="Search blog posts">
+            <div class="d-flex">
+                <label for="search-input" class="visually-hidden">Search for posts</label>
+                <input 
+                    id="search-input"
+                    class="form-control me-2" 
+                    type="search" 
+                    placeholder="Search posts..." 
+                    name="s" 
+                    aria-label="Search for posts"
+                    aria-describedby="search-help"
+                >
+                <button 
+                    class="btn btn-outline-secondary" 
+                    type="submit"
+                    aria-label="Submit search"
+                >
+                    <span aria-hidden="true">🔎</span>
+                    <span class="visually-hidden">Search</span>
+                </button>
+            </div>
+            <div id="search-help" class="visually-hidden">
+                Enter keywords to search for blog posts
+            </div>
         </form>
     </div>
-</div>
+</section>

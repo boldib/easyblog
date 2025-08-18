@@ -1,0 +1,237 @@
+/**
+ * Accessibility Styles for EEA Compliance
+ * Ensures proper focus indicators, color contrast, and screen reader support
+ */
+
+/* Skip Navigation Links */
+.visually-hidden-focusable {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.visually-hidden-focusable:focus {
+    position: absolute !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 0.5rem 1rem !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+    z-index: 9999 !important;
+    text-decoration: none !important;
+    border-radius: 0.375rem !important;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25) !important;
+}
+
+/* Screen Reader Only Content */
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Enhanced Focus Indicators */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus,
+select:focus,
+[tabindex]:focus {
+    outline: 3px solid #0d6efd !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25) !important;
+}
+
+/* High Contrast Focus for Dark Backgrounds */
+.navbar a:focus,
+.btn-primary:focus,
+.bg-dark a:focus {
+    outline: 3px solid #ffffff !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Required Field Indicators */
+.text-danger {
+    color: #dc3545 !important;
+    font-weight: bold;
+}
+
+/* Form Help Text */
+.form-text {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+/* Post Item Accessibility */
+.post-item {
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.post-item:last-child {
+    border-bottom: none;
+}
+
+.post-title a {
+    color: #212529;
+    text-decoration: none;
+}
+
+.post-title a:hover,
+.post-title a:focus {
+    color: #0d6efd;
+    text-decoration: underline;
+}
+
+/* Badge Accessibility */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+}
+
+.badge a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.badge a:hover,
+.badge a:focus {
+    text-decoration: underline;
+}
+
+/* Search Component */
+.search-component .btn {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Color Contrast Improvements */
+.text-muted {
+    color: #6c757d !important;
+}
+
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    color: #212529;
+}
+
+/* Ensure minimum touch target sizes (44px x 44px) */
+.btn,
+.nav-link,
+.dropdown-item,
+input[type="submit"],
+input[type="button"],
+button {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+}
+
+/* Dropdown accessibility improvements */
+.dropdown-menu {
+    border: 1px solid #dee2e6;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-item:focus {
+    background-color: #e9ecef;
+    color: #212529;
+}
+
+/* Error message styling */
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: #dc3545;
+}
+
+/* Loading states for better UX */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Responsive text scaling */
+@media (max-width: 768px) {
+    .h1, .h2, .h3, .h4, .h5, .h6,
+    h1, h2, h3, h4, h5, h6 {
+        line-height: 1.4;
+    }
+    
+    .btn {
+        min-height: 48px;
+        min-width: 48px;
+    }
+}
+
+/* Print styles for accessibility */
+@media print {
+    .visually-hidden {
+        position: static !important;
+        width: auto !important;
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        clip: auto !important;
+        white-space: normal !important;
+    }
+    
+    .skip-link {
+        display: none !important;
+    }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid #000;
+    }
+    
+    .btn {
+        border: 2px solid #000;
+    }
+    
+    a {
+        text-decoration: underline;
+    }
+}

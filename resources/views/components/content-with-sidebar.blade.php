@@ -17,19 +17,19 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="bg-white">
-                    <div class="p-2 card-header">
-                        <h5 class="mt-2">{{ $title }}</h5>
-                    </div>
+            <main class="col-md-8" role="main" aria-labelledby="main-heading">
+                <section class="bg-white card" aria-labelledby="main-heading">
+                    <header class="card-header p-3">
+                        <h1 id="main-heading" class="h4 mb-0">{{ $title }}</h1>
+                    </header>
 
-                    <div>
+                    <div class="card-body" role="region" aria-label="Main content">
                         {{ $slot }}
                     </div>
-                </div>
-            </div>
+                </section>
+            </main>
 
-            <div class="col-4 d-none d-md-block">
+            <aside class="col-4 d-none d-md-block" role="complementary" aria-label="Sidebar">
                 @if($showSidebarWrapper)
                     <div class="mt-2">
                         <x-dynamic-component :component="$sidebarComponent" />
@@ -37,7 +37,7 @@
                 @else
                     <x-dynamic-component :component="$sidebarComponent" />
                 @endif
-            </div>
+            </aside>
         </div>
     </div>
 @endsection

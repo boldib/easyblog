@@ -18,8 +18,16 @@
 
 </head>
 <body>
+    <!-- Skip Navigation Links -->
+    <a href="#main-content" class="visually-hidden-focusable btn btn-primary position-absolute top-0 start-0 m-2" style="z-index: 9999;">
+        Skip to main content
+    </a>
+    <a href="#navigation" class="visually-hidden-focusable btn btn-primary position-absolute top-0 start-0 m-2" style="z-index: 9999; margin-top: 3.5rem !important;">
+        Skip to navigation
+    </a>
+
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav id="navigation" class="navbar navbar-expand-md navbar-light bg-white shadow-sm" role="navigation" aria-label="Main navigation">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
@@ -86,7 +94,7 @@
             </div>
         </nav>
 
-        <main class="py-4">
+        <main id="main-content" class="py-4" role="main" tabindex="-1">
             @yield('content')
         </main>
     </div>

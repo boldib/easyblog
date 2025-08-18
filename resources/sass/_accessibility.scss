@@ -3,195 +3,287 @@
  * Ensures proper focus indicators, color contrast, and screen reader support
  */
 
-/* Skip Navigation Links */
+// ============================================================================
+// SCSS Variables
+// ============================================================================
+
+// Colors
+$primary-color: #0d6efd;
+$danger-color: #dc3545;
+$muted-color: #6c757d;
+$dark-color: #212529;
+$light-gray: #dee2e6;
+$lighter-gray: #e9ecef;
+$lightest-gray: #f8f9fa;
+$white: #ffffff;
+$black: #000000;
+
+// Focus & Accessibility
+$focus-outline-width: 3px;
+$focus-outline-offset: 2px;
+$focus-shadow-opacity: 0.25;
+$min-touch-target: 44px;
+$min-touch-target-mobile: 48px;
+
+// Typography
+$small-font-size: 0.875rem;
+$badge-font-size: 0.75rem;
+$line-height-headings: 1.4;
+
+// Spacing
+$border-radius: 0.375rem;
+$padding-sm: 0.25rem;
+$padding-md: 0.5rem;
+$padding-lg: 1rem;
+$margin-sm: 0.25rem;
+$margin-md: 0.5rem;
+$margin-lg: 1rem;
+
+// Z-index
+$z-skip-links: 9999;
+
+// ============================================================================
+// SCSS Mixins
+// ============================================================================
+
+// Screen reader only content
+@mixin visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+// Focus indicator
+@mixin focus-indicator($color: $primary-color, $shadow-color: rgba($primary-color, $focus-shadow-opacity)) {
+    outline: $focus-outline-width solid $color !important;
+    outline-offset: $focus-outline-offset !important;
+    box-shadow: 0 0 0 $focus-outline-width $shadow-color !important;
+}
+
+// Minimum touch target
+@mixin min-touch-target($size: $min-touch-target) {
+    min-height: $size;
+    min-width: $size;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: $padding-md $padding-lg;
+}
+
+// ============================================================================
+// Skip Navigation Links
+// ============================================================================
+
 .visually-hidden-focusable {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
+    @include visually-hidden;
+    
+    &:focus {
+        position: absolute !important;
+        width: auto !important;
+        height: auto !important;
+        padding: $padding-md $padding-lg !important;
+        margin: 0 !important;
+        overflow: visible !important;
+        clip: auto !important;
+        white-space: normal !important;
+        z-index: $z-skip-links !important;
+        text-decoration: none !important;
+        border-radius: $border-radius !important;
+        @include focus-indicator;
+    }
 }
 
-.visually-hidden-focusable:focus {
-    position: absolute !important;
-    width: auto !important;
-    height: auto !important;
-    padding: 0.5rem 1rem !important;
-    margin: 0 !important;
-    overflow: visible !important;
-    clip: auto !important;
-    white-space: normal !important;
-    z-index: 9999 !important;
-    text-decoration: none !important;
-    border-radius: 0.375rem !important;
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25) !important;
-}
+// ============================================================================
+// Screen Reader Only Content
+// ============================================================================
 
-/* Screen Reader Only Content */
 .visually-hidden {
-    position: absolute !important;
-    width: 1px !important;
-    height: 1px !important;
-    padding: 0 !important;
-    margin: -1px !important;
-    overflow: hidden !important;
-    clip: rect(0, 0, 0, 0) !important;
-    white-space: nowrap !important;
-    border: 0 !important;
+    @include visually-hidden;
 }
 
-/* Enhanced Focus Indicators */
+// ============================================================================
+// Focus Indicators
+// ============================================================================
+
+%focus-styles {
+    @include focus-indicator;
+}
+
 a:focus,
 button:focus,
 input:focus,
 textarea:focus,
 select:focus,
 [tabindex]:focus {
-    outline: 3px solid #0d6efd !important;
-    outline-offset: 2px !important;
-    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25) !important;
+    @extend %focus-styles;
 }
 
-/* High Contrast Focus for Dark Backgrounds */
-.navbar a:focus,
-.btn-primary:focus,
-.bg-dark a:focus {
-    outline: 3px solid #ffffff !important;
-    outline-offset: 2px !important;
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.5) !important;
+// High contrast focus for dark backgrounds
+.navbar,
+.btn-primary,
+.bg-dark {
+    a:focus,
+    button:focus {
+        @include focus-indicator($white, rgba($white, 0.5));
+    }
 }
 
-/* Required Field Indicators */
+// ============================================================================
+// Form Accessibility
+// ============================================================================
+
 .text-danger {
-    color: #dc3545 !important;
+    color: $danger-color !important;
     font-weight: bold;
 }
 
-/* Form Help Text */
 .form-text {
-    font-size: 0.875rem;
-    color: #6c757d;
-    margin-top: 0.25rem;
+    font-size: $small-font-size;
+    color: $muted-color;
+    margin-top: $margin-sm;
 }
 
-/* Post Item Accessibility */
+.invalid-feedback {
+    display: block;
+    width: 100%;
+    margin-top: $margin-sm;
+    font-size: $small-font-size;
+    color: $danger-color;
+}
+
+// ============================================================================
+// Post Components
+// ============================================================================
+
 .post-item {
-    border-bottom: 1px solid #dee2e6;
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
+    border-bottom: 1px solid $light-gray;
+    padding-bottom: $padding-lg;
+    margin-bottom: $padding-lg;
+    
+    &:last-child {
+        border-bottom: none;
+    }
 }
 
-.post-item:last-child {
-    border-bottom: none;
+.post-title {
+    a {
+        color: $dark-color;
+        text-decoration: none;
+        
+        &:hover,
+        &:focus {
+            color: $primary-color;
+            text-decoration: underline;
+        }
+    }
 }
 
-.post-title a {
-    color: #212529;
-    text-decoration: none;
-}
+// ============================================================================
+// Badge Components
+// ============================================================================
 
-.post-title a:hover,
-.post-title a:focus {
-    color: #0d6efd;
-    text-decoration: underline;
-}
-
-/* Badge Accessibility */
 .badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.375rem;
+    font-size: $badge-font-size;
+    padding: $padding-sm $padding-md;
+    border-radius: $border-radius;
+    
+    a {
+        color: inherit;
+        text-decoration: none;
+        
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
 }
 
-.badge a {
-    color: inherit;
-    text-decoration: none;
+// ============================================================================
+// Interactive Elements
+// ============================================================================
+
+%min-touch-target {
+    @include min-touch-target;
 }
 
-.badge a:hover,
-.badge a:focus {
-    text-decoration: underline;
-}
-
-/* Search Component */
-.search-component .btn {
-    min-width: 44px;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Color Contrast Improvements */
-.text-muted {
-    color: #6c757d !important;
-}
-
-.card-header {
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    color: #212529;
-}
-
-/* Ensure minimum touch target sizes (44px x 44px) */
 .btn,
 .nav-link,
 .dropdown-item,
 input[type="submit"],
 input[type="button"],
 button {
-    min-height: 44px;
-    min-width: 44px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.5rem 1rem;
+    @extend %min-touch-target;
 }
 
-/* Dropdown accessibility improvements */
+.search-component {
+    .btn {
+        @include min-touch-target;
+        display: flex;
+    }
+}
+
+// ============================================================================
+// Dropdown Accessibility
+// ============================================================================
+
 .dropdown-menu {
-    border: 1px solid #dee2e6;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: 1px solid $light-gray;
+    box-shadow: 0 0.5rem 1rem rgba($black, 0.15);
 }
 
-.dropdown-item:focus {
-    background-color: #e9ecef;
-    color: #212529;
+.dropdown-item {
+    &:focus {
+        background-color: $lighter-gray;
+        color: $dark-color;
+    }
 }
 
-/* Error message styling */
-.invalid-feedback {
-    display: block;
-    width: 100%;
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    color: #dc3545;
+// ============================================================================
+// Color & Contrast
+// ============================================================================
+
+.text-muted {
+    color: $muted-color !important;
 }
 
-/* Loading states for better UX */
+.card-header {
+    background-color: $lightest-gray;
+    border-bottom: 1px solid $light-gray;
+    color: $dark-color;
+}
+
+// ============================================================================
+// Loading States
+// ============================================================================
+
 .loading {
     opacity: 0.6;
     pointer-events: none;
 }
 
-/* Responsive text scaling */
+// ============================================================================
+// Media Queries
+// ============================================================================
+
+// Mobile responsiveness
 @media (max-width: 768px) {
     .h1, .h2, .h3, .h4, .h5, .h6,
     h1, h2, h3, h4, h5, h6 {
-        line-height: 1.4;
+        line-height: $line-height-headings;
     }
     
     .btn {
-        min-height: 48px;
-        min-width: 48px;
+        @include min-touch-target($min-touch-target-mobile);
     }
 }
 
-/* Print styles for accessibility */
+// Print styles
 @media print {
     .visually-hidden {
         position: static !important;
@@ -209,7 +301,7 @@ button {
     }
 }
 
-/* Reduced motion preferences */
+// Reduced motion preferences
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -221,14 +313,14 @@ button {
     }
 }
 
-/* High contrast mode support */
+// High contrast mode support
 @media (prefers-contrast: high) {
     .card {
-        border: 2px solid #000;
+        border: 2px solid $black;
     }
     
     .btn {
-        border: 2px solid #000;
+        border: 2px solid $black;
     }
     
     a {

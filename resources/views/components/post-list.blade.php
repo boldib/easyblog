@@ -52,14 +52,30 @@
 										{{ $post->created_at->diffForHumans() }}
 									</time>
 								@endif
+								@if( isset($post->comments_count) && $post->comments_count > 0 )
+									<span class="ms-2" aria-label="{{ $post->comments_count }} comments">
+										<i class="fas fa-comments" aria-hidden="true"></i> {{ $post->comments_count }}
+									</span>
+								@endif
 							</div>
 						</header>
 						<div class="post-excerpt">
-							<p class="mb-0" aria-describedby="post-{{ $post->id }}-excerpt">
+							<p class="mb-2" aria-describedby="post-{{ $post->id }}-excerpt">
 								<span id="post-{{ $post->id }}-excerpt">
 									{{ Str::words( $post->content, $wordLimit, '...' ) }}
 								</span>
 							</p>
+							@if( $post->tags && $post->tags->count() > 0 )
+								<div class="post-tags" aria-label="Post tags">
+									@foreach( $post->tags as $tag )
+										<a href="{{ url('posts/tag/' . $tag->slug) }}" 
+										   class="badge bg-light text-dark text-decoration-none me-1 mb-1"
+										   aria-label="View posts tagged with {{ $tag->title }}">
+											<i class="fas fa-tag" aria-hidden="true"></i> {{ $tag->title }}
+										</a>
+									@endforeach
+								</div>
+							@endif
 						</div>
 					</div>
 				</div>

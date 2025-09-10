@@ -19,8 +19,14 @@ class HomeController extends Controller {
 	 * @return ViewContract
 	 */
 	public function index(): ViewContract {
-		$posts = Post::orderByDesc( 'id' )->paginate( 10 )->onEachSide( 0 );
+		$posts = Post::with([
+				'user:id,name',
+				'user.profile:id,user_id,slug',
+				'tags:id,title,slug',
+			])
+			->orderByDesc('id')
+			->paginate(10);
 
-		return view( 'home', compact( 'posts' ) );
+		return view('home', compact('posts'));
 	}
 }
